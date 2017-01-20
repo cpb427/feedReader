@@ -1,0 +1,42 @@
+{
+  "name": "feed",
+  "plural": "feeds",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "feed": {
+      "type": "object"
+    },
+    "source": {
+      "type": "string"
+    },
+    "published": {
+      "type": "date",
+      "required": false
+    },
+    "link": {
+      "type": "string",
+      "required": false,
+      "default": "n"
+    },
+    "propertyName31": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
