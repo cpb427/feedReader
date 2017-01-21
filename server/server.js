@@ -38,6 +38,18 @@ var acquireBatchOfRSS = function() {
   }
 }
 
+var purgeOlderFeeds = function() {
+  //todays date
+  var today = new Date()
+  var yesterday = today.setDate(today.getDate() - 1);
+  var yesterdayString = yesterday.toISOString().slice(0, 19).replace('T', ' ');
+
+  ONE_DAY = 24 * 60 * 60 * 1000;  // Month in milliseconds
+  app.models.feed.destroyAll({where: {time: { Date.now() - ONE_DAY}}}, function(err, info){
+      if (err) throw err;
+  });
+}
+
 
 app.start = function() {
   // start the web server
@@ -50,6 +62,8 @@ app.start = function() {
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     	 setInterval(acquireBatchOfRSS,900000); //15 minutes
       //setInterval(acquireBatchOfRSS,10000); //10 seconds
+      ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
+      setInterval(purgeOlderFeeds, ONE_MONTH);
     }
   });
 };
