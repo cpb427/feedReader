@@ -39,7 +39,7 @@ var acquireBatchOfRSS = function() {
 
 var determineSource = function(link) {
   for(var i in sourceCheck) {
-      if(link.includes(sourceCheck[i])) {
+      if(link.indexOf(sourceCheck[i]) !== -1) {
         return feedSources[i];
       }
   }
@@ -67,6 +67,7 @@ app.start = function() {
     if (app.get('loopback-component-explorer')) {
       var explorerPath = app.get('loopback-component-explorer').mountPath;
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
+      acquireBatchOfRSS();
     	 setInterval(acquireBatchOfRSS,900000); //15 minutes
       //setInterval(acquireBatchOfRSS,10000); //10 seconds
       var ONE_DAY = 1 * 24 * 60 * 60 * 1000;
