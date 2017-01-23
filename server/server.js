@@ -7,9 +7,9 @@ var feed = require('feed-read');
 var app = module.exports = loopback();
 var feedModel = app.models.feed;
 //TODO: move this into the database
-var arrayOfRSSFeeds = ['http://feeds.ign.com/ign/all', 'http://feeds.feedburner.com/CrackedRSS', 'http://www.theonion.com/feeds/rss', 'http://www.npr.org/rss/rss.php'];
-var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.theonion.com', 'www.npr.org'];
-var feedSources = ['IGN', 'Cracked','The Onion','NPR'];
+var arrayOfRSSFeeds = ['http://feeds.ign.com/ign/all', 'http://feeds.feedburner.com/CrackedRSS', 'http://www.theonion.com/feeds/rss', 'http://www.npr.org/rss/rss.php', 'http://feeds.feedburner.com/techcrunch'];
+var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.theonion.com', 'www.npr.org', 'techcrunch.com'];
+var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch'];
 var articles = []
 var acquireBatchOfRSS = function() {
 
@@ -28,7 +28,7 @@ var acquireBatchOfRSS = function() {
       app.models.feed.findOrCreate({where:{title:currentArticle.title}}, {title:currentArticle.title,
                                                                          author:currentArticle.author,
                                                                          link:currentArticle.link,
-                                                                         content: currentArticle.content,
+                                                                         content: "<style>img{display: inline;height: auto;max-width: 100%;}</style>" + currentArticle.content,
                                                                           published: currentArticle.published,
                                                                           source: determineSource(currentArticle.link) }, function(response){
                                                                           });
