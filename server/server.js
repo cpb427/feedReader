@@ -39,7 +39,7 @@ var acquireBatchOfRSS = function() {
 
 var determineSource = function(link) {
   for(var i in sourceCheck) {
-      if(link.indexOf(sourceCheck[i]) !== -1) {
+      if(link.includes(sourceCheck[i])) {
         return feedSources[i];
       }
   }
