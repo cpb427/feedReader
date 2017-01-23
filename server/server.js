@@ -7,21 +7,20 @@ var feed = require('feed-read');
 var app = module.exports = loopback();
 var feedModel = app.models.feed;
 //TODO: move this into the database
-var arrayOfRSSFeeds = ['http://feeds.ign.com/ign/all', 'http://feeds.feedburner.com/CrackedRSS', 'http://www.theonion.com/feeds/rss', 'http://www.npr.org/rss/rss.php']
-var feedSources = ['ign', 'cracked','theonion','npr']
+var arrayOfRSSFeeds = ['http://feeds.ign.com/ign/all', 'http://feeds.feedburner.com/CrackedRSS', 'http://www.theonion.com/feeds/rss', 'http://www.npr.org/rss/rss.php'];
+var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.theonion.com', 'www.npr.org'];
+var feedSources = ['IGN', 'Cracked','The Onion','NPR'];
 var articles = []
 var acquireBatchOfRSS = function() {
 
   for(var r in arrayOfRSSFeeds) {
+
   	feed(arrayOfRSSFeeds[r], function(err, articles) {
-    	if (err) {
-        console.log('Error from stream ' + arrayOfRSSFeeds[r]);
-        throw err;
-      }
+    	if (err)  throw err;
+      
     var currentArticle;
   	for(var i in articles) {
   		var currentArticle = articles[i];
-      var currentSource = feedSources[i];
       //error handling
       if(currentArticle.published == '') {
         currentArticle.published = null;
@@ -31,10 +30,18 @@ var acquireBatchOfRSS = function() {
                                                                          link:currentArticle.link,
                                                                          content: currentArticle.content,
                                                                           published: currentArticle.published,
-                                                                          source: currentSource }, function(response){
+                                                                          source: determineSource(currentArticle.link) }, function(response){
                                                                           });
   	}
   	});
+  }
+}
+
+var determineSource = function(link) {
+  for(var i in sourceCheck) {
+      if(link.includes(sourceCheck[i])) {
+        return feedSources[i];
+      }
   }
 }
 
@@ -44,8 +51,8 @@ var purgeOlderFeeds = function() {
   var yesterday = today.setDate(today.getDate() - 1);
   var yesterdayString = yesterday.toISOString().slice(0, 19).replace('T', ' ');
 
-  ONE_DAY = 24 * 60 * 60 * 1000;  // Month in milliseconds
-  app.models.feed.destroyAll({where: {time: { Date.now() - ONE_DAY}}}, function(err, info){
+  var HALF_DAY = 12 * 60 * 60 * 1000;  // Month in milliseconds
+  app.models.feed.destroyAll({where: {published: {lt: Date.now() - HALF_DAY}}}, function(err, info){
       if (err) throw err;
   });
 }
@@ -62,8 +69,8 @@ app.start = function() {
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     	 setInterval(acquireBatchOfRSS,900000); //15 minutes
       //setInterval(acquireBatchOfRSS,10000); //10 seconds
-      ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
-      setInterval(purgeOlderFeeds, ONE_MONTH);
+      var ONE_DAY = 1 * 24 * 60 * 60 * 1000;
+      setInterval(purgeOlderFeeds, ONE_DAY);
     }
   });
 };
