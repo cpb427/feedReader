@@ -8,9 +8,12 @@ var app = module.exports = loopback();
 var feedModel = app.models.feed;
 //TODO: move this into the database
 var arrayOfRSSFeeds = ['http://feeds.ign.com/ign/all', 'http://feeds.feedburner.com/CrackedRSS', 'http://www.theonion.com/feeds/rss', 'http://www.npr.org/rss/rss.php', 'http://feeds.feedburner.com/techcrunch'];
-var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.theonion.com', 'www.npr.org', 'feedproxy.google.com/~r/Techcrunch'];
-var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch'];
-var articles = []
+var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.theonion.com', 'www.npr.org', 'feedproxy.google.com/~r/Techcrunch', 'www.wbur.org'];
+var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch', 'TechCrunch'];
+var articles = [];
+
+
+//Acquire all of the feeds by going through the list of urls 
 var acquireBatchOfRSS = function() {
 
   for(var r in arrayOfRSSFeeds) {
@@ -30,6 +33,7 @@ var acquireBatchOfRSS = function() {
                                                                          link:currentArticle.link,
                                                                          content: "<style>img{display: inline;height: auto;max-width: 100%;}</style>" + currentArticle.content,
                                                                           published: currentArticle.published,
+                                                                          deleted:false,
                                                                           source: determineSource(currentArticle.link) }, function(response){
                                                                           });
   	}
@@ -37,6 +41,7 @@ var acquireBatchOfRSS = function() {
   }
 }
 
+//use the url to determine the source for the app
 var determineSource = function(link) {
   for(var i in sourceCheck) {
       if(link.includes(sourceCheck[i])) {
@@ -45,6 +50,7 @@ var determineSource = function(link) {
   }
 }
 
+//purge feeds that have been teemed TOO OLD!
 var purgeOlderFeeds = function() {
   //todays date
   var today = new Date()

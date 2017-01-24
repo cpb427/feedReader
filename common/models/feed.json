@@ -31,8 +31,8 @@
       "required": false,
       "default": "n"
     },
-    "propertyName31": {
-      "type": "number"
+    "deleted": {
+      "type": "boolean"
     }
   },
   "validations": [],
