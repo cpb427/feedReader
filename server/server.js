@@ -13,7 +13,7 @@ var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch', 'TechCrunch
 var articles = [];
 
 //TODO : REFACTOR THIS LATER
-ar fs = require('fs');
+var fs = require('fs');
 var util = require('util');
 var logFile = fs.createWriteStream('log.txt', { flags: 'a' });
   // Or 'w' to truncate the file every time the process starts.
