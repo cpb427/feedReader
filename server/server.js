@@ -12,6 +12,20 @@ var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.t
 var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch', 'TechCrunch'];
 var articles = [];
 
+//TODO : REFACTOR THIS LATER
+ar fs = require('fs');
+var util = require('util');
+var logFile = fs.createWriteStream('log.txt', { flags: 'a' });
+  // Or 'w' to truncate the file every time the process starts.
+var logStdout = process.stdout;
+
+console.log = function () {
+  logFile.write(util.format.apply(null, arguments) + '\n');
+  logStdout.write(util.format.apply(null, arguments) + '\n');
+}
+console.error = console.log;
+//===========================================
+
 
 //Acquire all of the feeds by going through the list of urls 
 var acquireBatchOfRSS = function() {
@@ -19,8 +33,10 @@ var acquireBatchOfRSS = function() {
   for(var r in arrayOfRSSFeeds) {
 
   	feed(arrayOfRSSFeeds[r], function(err, articles) {
-    	if (err)  throw err;
-      
+    	if (err) {
+			console.log(error);
+			throw err;
+		}
     var currentArticle;
   	for(var i in articles) {
   		var currentArticle = articles[i];
@@ -59,7 +75,10 @@ var purgeOlderFeeds = function() {
 
   var HALF_DAY = 12 * 60 * 60 * 1000;  // Month in milliseconds
   app.models.feed.destroyAll({where: {published: {lt: Date.now() - HALF_DAY}}}, function(err, info){
-      if (err) throw err;
+      if (err) {
+	   console.log(error);  	
+       throw err;
+   }
   });
 }
 
@@ -85,7 +104,10 @@ app.start = function() {
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function(err) {
-  if (err) throw err;
+  if (err) {
+	console.log(error);
+  	throw err;
+  } 
 
   // start the server if `$ node server.js`
   if (require.main === module)
