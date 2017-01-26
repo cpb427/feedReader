@@ -11,7 +11,7 @@ var feedModel = app.models.feed;
 //TODO: move this into the database
 var arrayOfRSSFeeds = ['http://feeds.ign.com/ign/all', 'http://feeds.feedburner.com/CrackedRSS', 'http://www.theonion.com/feeds/rss', 'http://www.npr.org/rss/rss.php', 'http://feeds.feedburner.com/techcrunch', 'http://www.animenewsnetwork.com/news/rss.xml','http://comicbookrealm.com/rss/previews'];
 var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.theonion.com', 'www.npr.org', 'feedproxy.google.com/~r/Techcrunch', 'www.wbur.org', 'www.animenewsnetwork.com','http://comicbookrealm.com'];
-var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch', 'TechCrunch', 'Anime News', 'Comic Vine'];
+var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch', 'TechCrunch', 'Anime News', 'Comic Vine Previews'];
 var articles = [];
 
 //Make error logs print to a text file

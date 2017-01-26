@@ -37,13 +37,5 @@
     "public": true,
     "$promise": {},
     "$resolved": true
-  },
-  "Sources": {
-    "dataSource": "db",
-    "public": false
-  },
-  "Source": {
-    "dataSource": "Source",
-    "public": false
   }
 }

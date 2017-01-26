@@ -2,12 +2,5 @@
   "db": {
     "name": "db",
     "connector": "memory"
-  },
-  "Source": {
-    "host": "127.0.0.1",
-    "port": 27017,
-    "database": "Source",
-    "name": "Source",
-    "connector": "mongodb"
   }
 }
