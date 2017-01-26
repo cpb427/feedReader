@@ -31,7 +31,7 @@ var acquireBatchOfRSS = function() {
 
   	feed(arrayOfRSSFeeds[r], function(err, articles) {
     	if (err) {
-			console.log(error);
+			console.log(err);
 			throw err;  
 		}
     var currentArticle;
