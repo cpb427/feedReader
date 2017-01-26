@@ -3,29 +3,25 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 var feed = require('feed-read');
+var fs = require('fs');
+var util = require('util');
 
 var app = module.exports = loopback();
 var feedModel = app.models.feed;
 //TODO: move this into the database
-var arrayOfRSSFeeds = ['http://feeds.ign.com/ign/all', 'http://feeds.feedburner.com/CrackedRSS', 'http://www.theonion.com/feeds/rss', 'http://www.npr.org/rss/rss.php', 'http://feeds.feedburner.com/techcrunch'];
-var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.theonion.com', 'www.npr.org', 'feedproxy.google.com/~r/Techcrunch', 'www.wbur.org'];
-var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch', 'TechCrunch'];
+var arrayOfRSSFeeds = ['http://feeds.ign.com/ign/all', 'http://feeds.feedburner.com/CrackedRSS', 'http://www.theonion.com/feeds/rss', 'http://www.npr.org/rss/rss.php', 'http://feeds.feedburner.com/techcrunch', 'http://www.animenewsnetwork.com/news/rss.xml','http://comicbookrealm.com/rss/previews'];
+var sourceCheck = ['feeds.ign.com', 'feedproxy.google.com/~r/CrackedRSS', 'www.theonion.com', 'www.npr.org', 'feedproxy.google.com/~r/Techcrunch', 'www.wbur.org', 'www.animenewsnetwork.com','http://comicbookrealm.com'];
+var feedSources = ['IGN', 'Cracked','The Onion','NPR', 'TechCrunch', 'TechCrunch', 'Anime News', 'Comic Vine'];
 var articles = [];
 
-//TODO : REFACTOR THIS LATER
-var fs = require('fs');
-var util = require('util');
-var logFile = fs.createWriteStream('log.txt', { flags: 'a' });
-  // Or 'w' to truncate the file every time the process starts.
+//Make error logs print to a text file
+var logFile = fs.createWriteStream('errorLogs.txt', { flags: 'a' });
 var logStdout = process.stdout;
-
 console.log = function () {
   logFile.write(util.format.apply(null, arguments) + '\n');
   logStdout.write(util.format.apply(null, arguments) + '\n');
 }
 console.error = console.log;
-//===========================================
-
 
 //Acquire all of the feeds by going through the list of urls 
 var acquireBatchOfRSS = function() {
@@ -108,7 +104,6 @@ boot(app, __dirname, function(err) {
 	console.log(error);
   	throw err;
   } 
-
   // start the server if `$ node server.js`
   if (require.main === module)
     app.start();
